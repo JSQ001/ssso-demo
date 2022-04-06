@@ -1,9 +1,14 @@
 # spring-security-oauth2-demo
 ### Spring Security OAuth 最新官方已经不再维护，以下内容只用于学习记录。
 
+
 spring-security-oauth2-demo是使用Spring Security OAuth2对单点登录和登出的实现。
 
 Spring Security OAuth 建立在Spring Security 之上，所以大部分配置还是在Security中，Security完成对用户的认证和授权，OAuth完成单点登录。
+
+### spring-security-oauth2  处理请求拦截主要流程
+1. OAuth2ClientContextFilter拦截器设置请求currentUri
+2. AbstractAuthenticationProcessingFilter拦截器判断本次请求是否需要授权，其中未登录请求会创建一个anonymousUser Principal，在AntPathRequestMatcher类中的match方法判断
 
 ### 单点登录和登出
 单点登录是有多个子系统，一个认证中心。当访问其中任意一个子系统时，如果发现未登录，就跳到认证中心进行登录，登录完成后再跳回该子系统。
@@ -25,3 +30,5 @@ Spring Security OAuth 建立在Spring Security 之上，所以大部分配置还
 
 5. 使用Jwt增强token，如果资源服务器没有配置tokenService，就会调用配置的userInfoUri去auth-server获取用户信息；如果资源服务器配置了tokenService，再加上有UserDetails的实现类，可以解析，就不用在调用auth-server的接口。
 这里service-1配置了tokenService，service-2没有配置tokenService。
+
+

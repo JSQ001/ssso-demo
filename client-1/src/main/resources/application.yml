@@ -1,12 +1,25 @@
 
 server:
-  port: 9000
+  port: 9001
   servlet:
-    context-path: /auth-server
+    context-path: /client1
     session:
       cookie:
-        name: oauth-auth-server
+        name: oauth-client-1
         path: /
+
+security:
+  oauth2:
+    client:
+      clientId: client_1
+      clientSecret: 123456
+      # 获取访问令牌的URI
+      accessTokenUri: http://localhost:9000/auth-server/oauth/token
+      # 将用户重定向到的授权URI
+      userAuthorizationUri: http://localhost:9000/auth-server/oauth/authorize
+    resource:
+      # 获取当前用户详细信息
+      userInfoUri: http://localhost:9000/auth-server/security/getUserInfo
 
 spring:
   redis:
@@ -28,15 +41,6 @@ spring:
         max-idle: 8
         # 连接池中的最小空闲连接 默认 0
         min-idle: 0
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sso?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: jsq123456
-
-mybatis:
-  typeAliasesPackage: com.example.model
-  mapper-locations: classpath:mapper/**.xml
 
 logging:
   level:
