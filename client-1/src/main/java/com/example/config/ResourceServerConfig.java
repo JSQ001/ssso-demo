@@ -67,5 +67,4 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public TokenStore tokenStore(){
         return new RedisTokenStore(redisConnectionFactory);
     }
-
 }

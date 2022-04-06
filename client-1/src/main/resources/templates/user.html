@@ -7,11 +7,13 @@
 
 <h1>user.html</h1>
 
-<h1>service-1</h1>
+<h1>client-1</h1>
 
 <h1>Hello [[${#httpServletRequest.remoteUser}]]!</h1>
 
 <p><a th:href="@{/admin}">点击跳转 admin.html</a></p>
 
+<p><a th:href="@{/token}">获取token</a></p>
+<p><a th:href="@{/api/getUserInfo}">getUserInfo</a></p>
 </body>
 </html>
