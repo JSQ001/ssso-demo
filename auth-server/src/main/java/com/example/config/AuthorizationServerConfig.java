@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -67,7 +69,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
-                .withClientDetails(clientDetails(dataSource));
+            .withClientDetails(clientDetails(dataSource));
     }
 
     /**
@@ -85,13 +87,29 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
         endpoints
                 // 令牌存在redis
-                .tokenStore(tokenStore())
+                .tokenServices(tokenService())
+               // .tokenStore(tokenStore())
                 .tokenEnhancer(tokenEnhancerChain)
                 // 密码授权方式时需要
                 .authenticationManager(authenticationManager)
                 // /oauth/token 运行get和post
                 .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
     }
+
+    /**
+     * token 令牌服务
+     * @return
+     */
+    @Bean
+    public AuthorizationServerTokenServices tokenService() {
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());  //关联存储方式
+        defaultTokenServices.setSupportRefreshToken(true);
+        defaultTokenServices.setAccessTokenValiditySeconds(7200); //令牌有效期 两小时
+        defaultTokenServices.setRefreshTokenValiditySeconds(259200); //刷新令牌有效期 三天
+        return defaultTokenServices;
+    }
+
 
     /**
      * 配置redis，使用redis存token
