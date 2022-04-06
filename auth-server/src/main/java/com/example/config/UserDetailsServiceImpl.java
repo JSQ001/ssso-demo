@@ -23,19 +23,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private RoleService roleService;
 
-    @Resource
-    private BCryptPasswordEncoder passwordEncoder;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         User user = userService.getByUsername(username);
         user.setAuthorities(roleService.getByUserId(user.getId()));
-
-        user = new User();
-        user.setUsername("admin");
-        user.setPassword(passwordEncoder.encode("123456"));
-
         return user;
     }
 }

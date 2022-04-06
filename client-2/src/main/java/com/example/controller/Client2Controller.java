@@ -11,11 +11,11 @@ import org.springframework.web.servlet.ModelAndView;
 import java.security.Principal;
 
 @Controller
-public class Service2Controller {
+public class Client2Controller {
 
     @RequestMapping(path = {"/", "/home"})
     public ModelAndView home() {
-        return new ModelAndView("home");
+        return new ModelAndView("index");
     }
 
     // 需要开启方法级别保护

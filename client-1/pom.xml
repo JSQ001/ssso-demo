@@ -93,7 +93,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.3.0.RELEASE</version>
                 <configuration>
-                    <mainClass>com.example.Service1Application</mainClass>
+                    <mainClass>com.example.Client1Application</mainClass>
                 </configuration>
                 <executions>
                     <execution>
