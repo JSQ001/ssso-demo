@@ -81,15 +81,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        // token增强配置
-        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer, jwtAccessTokenConverter()));
-
         endpoints
-                // 令牌存在redis
                 .tokenServices(tokenService())
-               // .tokenStore(tokenStore())
-                .tokenEnhancer(tokenEnhancerChain)
+                .tokenStore(tokenStore())
+                //.tokenEnhancer(tokenEnhancerChain())
                 // 密码授权方式时需要
                 .authenticationManager(authenticationManager)
                 // /oauth/token 运行get和post
@@ -104,12 +99,24 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public AuthorizationServerTokenServices tokenService() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());  //关联存储方式
+        defaultTokenServices.setTokenEnhancer(tokenEnhancerChain());
         defaultTokenServices.setSupportRefreshToken(true);
         defaultTokenServices.setAccessTokenValiditySeconds(7200); //令牌有效期 两小时
         defaultTokenServices.setRefreshTokenValiditySeconds(259200); //刷新令牌有效期 三天
         return defaultTokenServices;
     }
 
+    /**
+     * 配置token增强
+     *
+     */
+    @Bean
+    public TokenEnhancerChain tokenEnhancerChain(){
+        // token增强配置
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer, jwtAccessTokenConverter()));
+        return tokenEnhancerChain;
+    }
 
     /**
      * 配置redis，使用redis存token

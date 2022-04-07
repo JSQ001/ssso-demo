@@ -28,7 +28,7 @@ public class ClientWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatcher("/**")
                 .authorizeRequests()
                 // 访问 / /home 不用授权
-                .antMatchers("/", "/home").permitAll()
+                .antMatchers("/","/getToken", "/home").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // 权限不足跳转 /401

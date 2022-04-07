@@ -30,6 +30,21 @@ public class Client1Controller {
         return new ModelAndView("index");
     }
 
+    /**
+     * 获取token
+     */
+    @GetMapping("/getToken")
+    @ResponseBody
+    public Authentication getTokenInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication.getPrincipal() == "anonymousUser"){
+            return null;
+        }
+        return authentication;
+    }
+
+
     // 需要开启方法级别保护
     //@PreAuthorize("hasRole('USER')")
     @RequestMapping("/user")
